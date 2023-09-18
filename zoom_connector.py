@@ -457,6 +457,26 @@ class ZoomConnector(BaseConnector):
         action_result.add_data(response)
         return action_result.set_status(phantom.APP_SUCCESS, 'User information for id {} successfully retrieved'.format(user_id))
 
+    def _handle_send_message(self, param):
+
+        self.save_progress('In action handler for: {0}'.format(self.get_action_identifier()))
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        user_id = param['user_id']
+        request_body = param['request_body']
+
+        ret_val, response = self._make_rest_call('/chat/users/{}/messages'.format(user_id), action_result, method='post', params=None, headers=None, json=json.dumps(request_body))
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+        
+        if response.status_code == 201:
+            action_result.add_data(response)
+            return action_result.set_status(phantom.APP_SUCCESS, 'Message sent')
+
+        return action_result.set_status(phantom.APP_ERROR, 'Something went wrong during sending a message: {}'.format(response))
+    
     def _handle_get_meeting(self, param):
 
         self.save_progress('In action handler for: {0}'.format(self.get_action_identifier()))
@@ -517,6 +537,9 @@ class ZoomConnector(BaseConnector):
 
         elif action_id == 'update_user_settings':
             ret_val = self._handle_update_user_settings(param)
+        
+        elif action_id == 'send_message':
+            ret_val = self._handle_send_message(param)
 
         return ret_val
 

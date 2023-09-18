@@ -11,7 +11,7 @@
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "license": "Copyright (c) 2021-2023 Splunk Inc.",
-    "app_version": "2.1.0",
+    "app_version": "2.1.1-fdse",
     "utctime_updated": "2022-08-18T22:38:54.000000Z",
     "package_name": "phantom_zoom",
     "main_module": "zoom_connector.py",
@@ -2385,6 +2385,68 @@
                     "example_values": [
                         1
                     ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "send a chat message",
+            "description": "Send chat messages to a user in your contact list or to a channel of which you are a member.",
+            "type": "generic",
+            "identifier": "send_message",
+            "read_only": false,
+            "parameters": {
+                "user_id": {
+                    "description": "Zoom user ID",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "zoom user id"
+                    ],
+                    "order": 0
+                },
+                "request_body":{
+                    "description": "Request body in Json format",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "order": 1
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.user_id",
+                    "data_type": "string",
+                    "contains": [
+                        "zoom user id"
+                    ],
+                    "column_name": "User ID",
+                    "column_order": 0,
+                    "example_values": [
+                        "A0BiCtoDEFGHIzYaZcLdsA"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
                 }
             ],
             "render": {
